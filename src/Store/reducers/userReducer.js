@@ -1,14 +1,16 @@
-// import { ADD_USER, UPDATE_USER } from "../types/user";
+import { ADD_USER, UPDATE_USER, DELETE_USER, SET_SELECTED_USER  } from "../types/user";
 
 const DEFAULT_STATE = {
   userList: [
     {
+      id: 1,
       MaSV: 1,
       HoTen: "Hanh Tran",
       phoneNumber: "123131231",
       email: "dasaf@gmail.com",
     },
     {
+      id: 2,
       MaSV: 2,
       HoTen: "Hoa Tran",
       phoneNumber: "123155555",
@@ -20,13 +22,13 @@ const DEFAULT_STATE = {
 
 export const userReducer = (state = DEFAULT_STATE, { type, payload }) => {
   switch (type) {
-    case "ADD_USER": {
+    case ADD_USER: {
       const data = [...state.userList];
       data.push({ ...payload, id: Date.now() });
       state.userList = data;
       return { ...state };
     }
-    case "UPDATE_USER": {
+    case UPDATE_USER: {
       // const data = [...state.userList];
       // const idx = data.findIndex(ele => ele.id=== payload.id);
       // if(idx !== -1) {
@@ -39,11 +41,11 @@ export const userReducer = (state = DEFAULT_STATE, { type, payload }) => {
       state.selectedUser = null;
       return { ...state };
     }
-    case "SET_SELECTED_USER": {
+    case SET_SELECTED_USER: {
       state.selectedUser = payload;
       return { ...state };
     }
-    case "DELETE_USER": {
+    case DELETE_USER: {
       // const data = [...state.userList];
       // const idx = data.findIndex((ele) => ele.id === payload.id);
       // if (idx !== -1) {

@@ -2,6 +2,7 @@ import React, { Component, createRef } from 'react'
 import { connect } from 'react-redux';
 
 const DEFAULT_VALUE = {
+  id:'',
   MaSV: '',
   HoTen: '',
   phoneNumber: '',
@@ -49,6 +50,16 @@ class RegisterForm extends Component {
 
   formRef = createRef();
 
+  static getDerivedStateFromProps(nextProps, currentState) {
+    if (
+      nextProps.selectedUser &&
+      currentState.values.id !== nextProps.selectedUser.id
+    ) {
+      currentState.values = nextProps.selectedUser;
+    }
+    return currentState;
+  }
+
   handleBlur = (event) => {
     const { name, title, minLength, maxLength, validity: { valueMissing, patternMismatch, tooLong, tooShort }, } = event.target;
 
@@ -72,6 +83,7 @@ class RegisterForm extends Component {
   }
 
   render() {
+    const { MaSV,HoTen,phoneNumber,email } = this.state.values || {};
     return (
       <div className="card p-0">
         <div className="card-header bg-dark text-white font-weight-bold">
@@ -86,6 +98,7 @@ class RegisterForm extends Component {
                   <input type="text" className="form-control" title='Mã SV' name='MaSV' required
                     onChange={(event) => this.handleChange(event)}
                     onBlur={(event) => this.handleBlur(event)}
+                    value = { MaSV}
                   />
                   {
                     this.state.errors.MaSV && <span className='text-danger'>{this.state.errors.MaSV}</span>
@@ -96,9 +109,9 @@ class RegisterForm extends Component {
                 <div className="form-group">
                   <label>Họ Tên</label>
                   <input type="text" className="form-control" title='Họ Tên' name='HoTen' required
-                  pattern= "[a-z]" 
                     onChange={(event) => this.handleChange(event)}
                     onBlur={(event) => this.handleBlur(event)}
+                    value = {HoTen}
                   />
                   {
                     this.state.errors.HoTen && <span className='text-danger'>{this.state.errors.HoTen}</span>
@@ -109,9 +122,10 @@ class RegisterForm extends Component {
                 <div className="form-group">
                   <label>Số điện thoại</label>
                   <input type="text" className="form-control" title='Số điện thoại' name='phoneNumber' required
-                    minLength={8} maxLength={12} pattern= "[0-9]" 
+                    minLength={8} maxLength={12} pattern="[0-9]+"
                     onChange={(event) => this.handleChange(event)}
                     onBlur={(event) => this.handleBlur(event)}
+                    value = {phoneNumber}
                   />
                   {
                     this.state.errors.phoneNumber && <span className='text-danger'>{this.state.errors.phoneNumber}</span>
@@ -125,6 +139,7 @@ class RegisterForm extends Component {
                   <input type="text" className="form-control" title='Email' name='email' required pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+[.]{1}[a-zA-Z]{2,}$'
                     onChange={(event) => this.handleChange(event)}
                     onBlur={(event) => this.handleBlur(event)}
+                    value = {email}
                   />
                   {
                     this.state.errors.email && <span className='text-danger'>{this.state.errors.email}</span>
@@ -133,7 +148,7 @@ class RegisterForm extends Component {
               </div>
             </div>
             <div className=" text-muted">
-              <button className="btn btn-success mr-2" onClick={(event) => this.handleSubmit(event)}>Thêm sinh viên</button>
+              <button disabled={!this.formRef.current?.checkValidity()} className="btn btn-success mr-2" onClick={(event) => this.handleSubmit(event)}>Thêm sinh viên</button>
             </div>
           </form>
         </div>
